@@ -150,7 +150,7 @@ public abstract class EntityMixin_Disguise implements EntityDisguise, DisguiseUt
 
             if (this.disguiselib$profile != null) {
                 // Previous type was player, we have to send a player remove packet
-                PlayerRemoveS2CPacket listPacket = new PlayerRemoveS2CPacket(new ArrayList(Collections.singletonList(this.disguiselib$profile.getId())));
+                PlayerRemoveS2CPacket listPacket = new PlayerRemoveS2CPacket(new ArrayList<>(Collections.singletonList(this.disguiselib$profile.getId())));
                 manager.sendToAll(listPacket);
             }
 

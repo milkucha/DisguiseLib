@@ -75,7 +75,7 @@ public abstract class ServerPlayNetworkHandlerMixin_Disguiser {
                     for (var packet2 : list) {
                         atomic.set(true);
                         adder.clear();
-                        this.disguiselib$transformPacket(packet2, () -> atomic.set(false), list2::add);
+                        this.disguiselib$transformPacket(packet2, () -> atomic.set(false), adder::add);
 
                         if (atomic.get()) {
                             list2.add(packet2);

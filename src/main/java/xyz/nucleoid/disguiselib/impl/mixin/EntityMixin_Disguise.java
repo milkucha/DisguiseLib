@@ -329,7 +329,7 @@ public abstract class EntityMixin_Disguise implements EntityDisguise, DisguiseUt
      */
     @Unique
     private void disguiselib$constructFakePlayer(@NotNull GameProfile profile) {
-        this.disguiselib$disguiseEntity = new ServerPlayerEntity(world.getServer(), (ServerWorld) world, profile);
+        this.disguiselib$disguiseEntity = new ServerPlayerEntity(world.getServer(), (ServerWorld) world, profile, null);
         this.disguiselib$disguiseEntity.getDataTracker().set(getPLAYER_MODEL_PARTS(), (byte) 0x7f);
     }
 
@@ -351,7 +351,7 @@ public abstract class EntityMixin_Disguise implements EntityDisguise, DisguiseUt
      */
     @Unique
     private void disguiselib$sendProfileUpdates() {
-        PlayerRemoveS2CPacket packet = new PlayerRemoveS2CPacket(new ArrayList(Collections.singletonList(this.disguiselib$profile.getId())));
+        PlayerRemoveS2CPacket packet = new PlayerRemoveS2CPacket(new ArrayList<>(Collections.singletonList(this.disguiselib$profile.getId())));
 
         PlayerManager playerManager = this.world.getServer().getPlayerManager();
         playerManager.sendToAll(packet);
@@ -370,10 +370,10 @@ public abstract class EntityMixin_Disguise implements EntityDisguise, DisguiseUt
 
         // Changing entity on client
         if (this.disguiselib$entity instanceof ServerPlayerEntity player) {
-            ServerWorld targetWorld = (ServerWorld) player.getWorld();
+            ServerWorld targetWorld = player.getServerWorld();
 
             player.networkHandler.sendPacket(new PlayerRespawnS2CPacket(
-                    targetWorld.getDimensionKey(),  // getDimension()
+                    targetWorld.getDimensionKey(),
                     targetWorld.getRegistryKey(),
                     BiomeAccess.hashSeed(targetWorld.getSeed()),
                     player.interactionManager.getGameMode(),
@@ -381,7 +381,7 @@ public abstract class EntityMixin_Disguise implements EntityDisguise, DisguiseUt
                     targetWorld.isDebugWorld(),
                     targetWorld.isFlat(),
                     (byte) 3,
-                    Optional.empty(),
+                    player.getLastDeathPos(),
                     player.getPortalCooldown()
             ));
             player.networkHandler.requestTeleport(player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch());
